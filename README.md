@@ -1,12 +1,74 @@
-# React + Vite
+# Library Zone - Book Management Web Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🔗 [Live Demo](https://library-zone.web.app/)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🧾 Project Overview
 
-## Expanding the ESLint configuration
+**Library Zone** is a full-stack web application that allows users to explore a collection of books, view book details, and manage library entries. The app supports adding, viewing, deleting, and fetching specific books through a custom backend built with **MongoDB** and **Node.js**. Firebase is used for user authentication, and the frontend is built with React and Tailwind CSS for responsive UI.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🖼️ Screenshot
+
+![Library Zone Screenshot](https://i.ibb.co/bjwBS70j/Screenshot-2025-06-25-014203.png)
+<!-- Replace the above URL with your actual uploaded screenshot link -->
+
+---
+
+## 🔧 Main Technologies Used
+
+- React.js
+- Node.js + Express.js
+- MongoDB (CRUD operations)
+- Firebase Authentication
+- Tailwind CSS
+- React Hook Form
+- React Router
+
+---
+
+## 🚀 Main Features
+
+- 🔐 Firebase-based User Registration & Login
+- 📚 View all books from MongoDB
+- 📖 Get details of a specific book
+- ➕ Add a new book to the database
+- ❌ Delete a book by ID
+- 🖼️ Responsive UI using Tailwind and DaisyUI
+- 🛡️ Protected routes for authenticated users
+- 🌐 Dynamic routing for book detail pages
+
+---
+
+## 📦 Project Dependencies
+
+**Frontend:**
+- `react`
+- `react-dom`
+- `react-router-dom`
+- `firebase`
+- `axios`
+- `tailwindcss`
+- `react-hook-form`
+- `daisyui`
+
+**Backend:**
+- `express`
+- `cors`
+- `dotenv`
+- `mongodb`
+- `jsonwebtoken` (if used for route protection)
+
+---
+
+## 🛠️ How to Run Locally
+
+### ⚙️ Frontend Setup:
+
+1. Clone the frontend repo:
+```bash
+git clone client : https://github.com/kira217-cyber/library_zone_client
+git clone server : https://github.com/kira217-cyber/library_zone_server
+
