@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import { toast } from "react-toastify";
+import Loading from "./shared/Loading";
 
 const BorrowedBooks = () => {
   const { user } = useAuth();
   const [borrowed, setBorrowed] = useState([]);
+  const [loading,setLoading] = useState(false)
 
   useEffect(() => {
     if (user?.email) {
@@ -17,6 +19,7 @@ const BorrowedBooks = () => {
         })
         .then((res) => {
           setBorrowed(res.data); // Save borrowed books
+          setLoading(true)
         })
         .catch((err) => console.error(err));
     }
@@ -39,6 +42,10 @@ const BorrowedBooks = () => {
     // Optionally, show console message for simulating quantity update
     console.log(`Book with ID ${bookId} returned (simulate +1 quantity).`);
   };
+
+  if (!loading) {
+    return <Loading></Loading>;
+  }
 
   return (
     <div className="min-h-screen pt-20 bg-gray-100 py-10 px-4">

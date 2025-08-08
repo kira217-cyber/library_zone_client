@@ -50,7 +50,7 @@ const Navbar = () => {
           className="hover:text-white"
           onClick={() => setMenuOpen(false)}
         >
-          dashboard
+          Dashboard
         </NavLink>
       </li>
       }

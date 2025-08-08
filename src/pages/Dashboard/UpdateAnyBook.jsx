@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Link, useLoaderData } from "react-router";
-import Loading from "./shared/Loading";
+import useAuth from "../../hooks/useAuth";
+import Loading from "../shared/Loading";
 
-const AllBooks = () => {
-  const [loading, setLoading] = useState(false);
+
+
+const UpdateAnyBook = () => {
+    const [loading, setLoading] = useState(false);
   const allBooks = useLoaderData();
   const books = allBooks.data;
 
@@ -17,7 +20,6 @@ const AllBooks = () => {
     const matchesSearch = book.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
-  
     return matchesAvailability && matchesSearch;
   });
 
@@ -30,7 +32,7 @@ const AllBooks = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-          <h2 className="text-2xl font-bold text-[#2563EB]">All Books</h2>
+          <h2 className="text-2xl font-bold text-[#2563EB]">Update Any Books</h2>
           <div className="flex gap-4 flex-wrap">
             <select
               value={viewType}
@@ -84,14 +86,16 @@ const AllBooks = () => {
                   <p className="text-sm">📚 {book.category}</p>
                   <p className="text-sm">⭐ {book.rating}</p>
                   <p className="text-sm">
-                    {book.quantity > 0 ? "✅ Available" : "❌ Not Available"}
+                    {book.quantity > 0
+                      ? "✅ Available"
+                      : "❌ Not Available"}
                   </p>
                   <div className="mt-auto flex justify-between gap-2 pt-4">
                     <Link
-                      to={`/bookDetails/${book._id}`}
+                      to={`/dashboard/updateBook/${book._id}`}
                       className="w-full text-center bg-green-600 text-white py-1 rounded hover:bg-green-700 transition"
                     >
-                      View Details
+                      Update Book
                     </Link>
                   </div>
                 </div>
@@ -136,7 +140,7 @@ const AllBooks = () => {
                     <td className="p-2">{book.quantity}</td>
                     <td className="p-2 space-x-2">
                       <Link
-                        to={`/bookDetails/${book._id}`}
+                        to={`/dashboard/updateBook/${book._id}`}
                         className="bg-green-600 hover:cursor-pointer text-white px-2 py-1 rounded hover:bg-green-700 transition text-xs"
                       >
                         View Details
@@ -153,4 +157,4 @@ const AllBooks = () => {
   );
 };
 
-export default AllBooks;
+export default UpdateAnyBook;

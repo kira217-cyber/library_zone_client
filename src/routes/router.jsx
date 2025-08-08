@@ -14,6 +14,9 @@ import ErrorPage from "../pages/ErrorPage";
 import SingleCategory from "../components/Category/SingleCategory";
 import AboutUs from "../pages/AboutUs";
 import Profile from "../pages/Profile";
+import DashboardLayouts from "../MainLayouts/DashboardLayouts";
+import Statistics from "../pages/Dashboard/Statistics";
+import UpdateAnyBook from "../pages/Dashboard/UpdateAnyBook";
 
 export const router = createBrowserRouter([
   {
@@ -46,16 +49,7 @@ export const router = createBrowserRouter([
         loader: () => axios(`${import.meta.env.VITE_API_URL}/books`),
         element: <AllBooks></AllBooks>,
       },
-      {
-        path: "/updateBook/:id",
-        loader: ({ params }) =>
-          axios(`${import.meta.env.VITE_API_URL}/books/${params.id}`),
-        element: (
-          <PrivetRoute>
-            <UpdateBook></UpdateBook>
-          </PrivetRoute>
-        ),
-      },
+      
       {
         path: "/bookDetails/:id",
         loader: ({ params }) =>
@@ -71,10 +65,16 @@ export const router = createBrowserRouter([
   },
   {
     path: "dashboard",
+    element: <PrivetRoute><DashboardLayouts></DashboardLayouts></PrivetRoute>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,
-        element: <h1>Dashboard Home</h1>,
+        element: (
+          <PrivetRoute>
+            <Statistics></Statistics>
+          </PrivetRoute>
+        ),
       },
       {
         path: "borrowedBooks",
@@ -87,12 +87,19 @@ export const router = createBrowserRouter([
       {
         path: "updateBook/:id",
         loader: ({ params }) =>
-          axios(`${import.meta.env.VITE_API_URL}/books/${params.id}`),
+        axios(`${import.meta.env.VITE_API_URL}/books/${params.id}`),
         element: (
           <PrivetRoute>
             <UpdateBook></UpdateBook>
           </PrivetRoute>
         ),
+      },
+      {
+        path: "update-any-book",
+        loader: () => axios(`${import.meta.env.VITE_API_URL}/books`),
+        element:<PrivetRoute>
+          <UpdateAnyBook></UpdateAnyBook>
+        </PrivetRoute>
       },
       {
         path: "addBook",
