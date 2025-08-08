@@ -12,12 +12,13 @@ import UpdateBook from "../pages/UpdateBook";
 import axios from "axios";
 import ErrorPage from "../pages/ErrorPage";
 import SingleCategory from "../components/Category/SingleCategory";
+import AboutUs from "../pages/AboutUs";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: RootLayouts,
-    errorElement:<ErrorPage></ErrorPage>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,
@@ -32,12 +33,14 @@ export const router = createBrowserRouter([
         Component: Register,
       },
       {
+        path: "about",
+        Component: AboutUs,
+      },
+      {
         path: "allBooks",
         loader: () => axios(`${import.meta.env.VITE_API_URL}/books`),
         element: (
-          <PrivetRoute>
             <AllBooks></AllBooks>
-          </PrivetRoute>
         ),
       },
       {
@@ -53,9 +56,7 @@ export const router = createBrowserRouter([
         loader: ({ params }) =>
           axios(`${import.meta.env.VITE_API_URL}/books/${params.id}`),
         element: (
-          <PrivetRoute>
             <BookDetails></BookDetails>
-          </PrivetRoute>
         ),
       },
       {
@@ -67,10 +68,12 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path:"/category/:name",
-        element:<PrivetRoute>
+        path: "/category/:name",
+        element: (
+      
             <SingleCategory></SingleCategory>
-        </PrivetRoute>
+
+        ),
       },
       {
         path: "/updateBook/:id",
@@ -81,6 +84,15 @@ export const router = createBrowserRouter([
             <UpdateBook></UpdateBook>
           </PrivetRoute>
         ),
+      },
+    ],
+  },
+  {
+    path: "dashboard",
+    children: [
+      {
+        index: true,
+        element: <h1>Dashboard Home</h1>,
       },
     ],
   },

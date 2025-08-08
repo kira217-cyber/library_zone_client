@@ -41,22 +41,26 @@ const Navbar = () => {
           All Books
         </NavLink>
       </li>
-      <li>
+      
+    
+      {
+        user && <li>
         <NavLink
-          to="/addBook"
+          to="/dashboard"
           className="hover:text-white"
           onClick={() => setMenuOpen(false)}
         >
-          Add Book
+          dashboard
         </NavLink>
       </li>
+      }
       <li>
         <NavLink
-          to="/borrowedBooks"
+          to="/about"
           className="hover:text-white"
           onClick={() => setMenuOpen(false)}
         >
-          Borrowed Books
+          About Us
         </NavLink>
       </li>
       

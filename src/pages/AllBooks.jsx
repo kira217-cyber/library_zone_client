@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 import { Link, useLoaderData } from "react-router";
-
+import useAuth from "../hooks/useAuth";
+import Loading from "./shared/Loading";
 
 const AllBooks = () => {
+  const { loading } = useAuth();
 
-const allBooks = useLoaderData()
-const books = allBooks.data
+  const allBooks = useLoaderData();
+  const books = allBooks.data;
   const [viewType, setViewType] = useState("card");
   const [showAvailableOnly, setShowAvailableOnly] = useState(false);
 
   const filteredBooks = showAvailableOnly
     ? books.filter((book) => book.quantity > 0)
     : books;
+
+  if (loading) {
+    return <Loading></Loading>;
+  }
 
   return (
     <div className="min-h-screen pt-20 px-4 py-6 bg-gray-50">
@@ -62,7 +68,7 @@ const books = allBooks.data
                 </p>
                 <div className="mt-auto flex justify-between gap-2 pt-4">
                   <button className="w-1/2 hover:cursor-pointer bg-[#2563EB] text-white py-1 rounded hover:bg-blue-700 transition">
-                   <Link to={`/updateBook/${book._id}`}> Update</Link>
+                    <Link to={`/updateBook/${book._id}`}> Update</Link>
                   </button>
                   <button className="w-1/2 hover:cursor-pointer bg-green-600 text-white py-1 rounded hover:bg-green-700 transition">
                     <Link to={`/bookDetails/${book._id}`}>View Details</Link>
@@ -105,10 +111,13 @@ const books = allBooks.data
                     <td className="p-2">{book.quantity}</td>
                     <td className="p-2 space-x-2">
                       <button className="bg-[#2563EB] hover:cursor-pointer text-white px-2 py-1 rounded hover:bg-blue-700 transition text-xs">
-                       <Link to={`/updateBook/${book._id}`}> Update</Link>
+                        <Link to={`/updateBook/${book._id}`}> Update</Link>
                       </button>
                       <button className="bg-green-600 hover:cursor-pointer text-white px-2 py-1 rounded hover:bg-green-700 transition text-xs">
-                        <Link to={`/bookDetails/${book._id}`}> View Details</Link>
+                        <Link to={`/bookDetails/${book._id}`}>
+                          {" "}
+                          View Details
+                        </Link>
                       </button>
                     </td>
                   </tr>

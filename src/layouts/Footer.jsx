@@ -25,11 +25,9 @@ const Footer = () => {
               <Link to="/allBooks" className="hover:underline">All Books</Link>
             </li>
             <li>
-              <Link to="/addBook" className="hover:underline">Add Book</Link>
+              <Link to="/about" className="hover:underline">About Us</Link>
             </li>
-            <li>
-              <Link to="/borrowedBooks" className="hover:underline">Borrowed Books</Link>
-            </li>
+            
           </ul>
         </div>
 
