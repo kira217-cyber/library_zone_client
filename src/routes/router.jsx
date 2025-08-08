@@ -39,41 +39,7 @@ export const router = createBrowserRouter([
       {
         path: "allBooks",
         loader: () => axios(`${import.meta.env.VITE_API_URL}/books`),
-        element: (
-            <AllBooks></AllBooks>
-        ),
-      },
-      {
-        path: "addBook",
-        element: (
-          <PrivetRoute>
-            <AddBook></AddBook>
-          </PrivetRoute>
-        ),
-      },
-      {
-        path: "/bookDetails/:id",
-        loader: ({ params }) =>
-          axios(`${import.meta.env.VITE_API_URL}/books/${params.id}`),
-        element: (
-            <BookDetails></BookDetails>
-        ),
-      },
-      {
-        path: "borrowedBooks",
-        element: (
-          <PrivetRoute>
-            <BorrowedBooks></BorrowedBooks>
-          </PrivetRoute>
-        ),
-      },
-      {
-        path: "/category/:name",
-        element: (
-      
-            <SingleCategory></SingleCategory>
-
-        ),
+        element: <AllBooks></AllBooks>,
       },
       {
         path: "/updateBook/:id",
@@ -85,6 +51,17 @@ export const router = createBrowserRouter([
           </PrivetRoute>
         ),
       },
+      {
+        path: "/bookDetails/:id",
+        loader: ({ params }) =>
+          axios(`${import.meta.env.VITE_API_URL}/books/${params.id}`),
+        element: <BookDetails></BookDetails>,
+      },
+
+      {
+        path: "/category/:name",
+        element: <SingleCategory></SingleCategory>,
+      },
     ],
   },
   {
@@ -93,6 +70,32 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <h1>Dashboard Home</h1>,
+      },
+      {
+        path: "borrowedBooks",
+        element: (
+          <PrivetRoute>
+            <BorrowedBooks></BorrowedBooks>
+          </PrivetRoute>
+        ),
+      },
+      {
+        path: "updateBook/:id",
+        loader: ({ params }) =>
+          axios(`${import.meta.env.VITE_API_URL}/books/${params.id}`),
+        element: (
+          <PrivetRoute>
+            <UpdateBook></UpdateBook>
+          </PrivetRoute>
+        ),
+      },
+      {
+        path: "addBook",
+        element: (
+          <PrivetRoute>
+            <AddBook></AddBook>
+          </PrivetRoute>
+        ),
       },
     ],
   },
