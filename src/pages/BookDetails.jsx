@@ -42,8 +42,13 @@ const BookDetails = () => {
   }, [user?.email, _id]);
 
   const handleBorrow = () => {
+    if (!user?.email) {
+      toast.error("Please login to borrow books.");
+      return;
+    }
+
     if (user?.email === email) {
-      toast.error("Please this is Your Book. Select another book.");
+      toast.error("This is your own book. Select another book.");
       return;
     }
 
@@ -61,7 +66,7 @@ const BookDetails = () => {
       toast.error("No books available.");
       return;
     }
-    const borrowedDate = new Date().toISOString(); // ⬅️ current time
+    const borrowedDate = new Date().toISOString();
 
     const borrowedBook = {
       bookId: _id,
@@ -83,7 +88,7 @@ const BookDetails = () => {
           setQuantity((prev) => prev - 1);
           setAlreadyBorrowed(true);
           toast.success("Book borrowed successfully!");
-          navigate("/borrowedBooks");
+          navigate("/dashboard/borrowedBooks");
           setIsOpen(false);
         }
       })
@@ -91,6 +96,10 @@ const BookDetails = () => {
         console.log(err);
       });
   };
+
+  // Button disable condition
+  const isBorrowDisabled =
+    !user?.email || user?.email === email || alreadyBorrowed || quantity <= 0;
 
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-8 flex justify-center items-center">
@@ -121,14 +130,18 @@ const BookDetails = () => {
 
             <button
               onClick={() => setIsOpen(true)}
-              disabled={quantity <= 0 || alreadyBorrowed}
+              disabled={isBorrowDisabled}
               className={`mt-4 px-4 py-2 hover:cursor-pointer rounded text-white font-semibold ${
-                quantity <= 0 || alreadyBorrowed
+                isBorrowDisabled
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-[#2563EB] hover:bg-blue-700 transition"
               }`}
             >
-              {alreadyBorrowed
+              {!user?.email
+                ? "Login to Borrow"
+                : user?.email === email
+                ? "Your Own Book"
+                : alreadyBorrowed
                 ? "Already Borrowed"
                 : quantity <= 0
                 ? "Not Available"

@@ -40,7 +40,7 @@ const UpdateBook = () => {
           console.log("Updated:", res.data);
           toast.success("Book updated successfully!");
 
-          navigate("/allBooks");
+          navigate("/dashboard/update-any-book");
         }
       })
       .catch((error) => {
