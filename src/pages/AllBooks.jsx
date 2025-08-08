@@ -5,24 +5,30 @@ import Loading from "./shared/Loading";
 
 const AllBooks = () => {
   const { loading } = useAuth();
-
   const allBooks = useLoaderData();
   const books = allBooks.data;
+
   const [viewType, setViewType] = useState("card");
   const [showAvailableOnly, setShowAvailableOnly] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // নতুন state
 
-  const filteredBooks = showAvailableOnly
-    ? books.filter((book) => book.quantity > 0)
-    : books;
+  // ফিল্টার লজিক
+  const filteredBooks = books.filter((book) => {
+    const matchesAvailability = showAvailableOnly ? book.quantity > 0 : true;
+    const matchesSearch = book.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    return matchesAvailability && matchesSearch;
+  });
 
   if (loading) {
-    return <Loading></Loading>;
+    return <Loading />;
   }
 
   return (
     <div className="min-h-screen pt-20 px-4 py-6 bg-gray-50">
       <div className="max-w-6xl mx-auto">
-        {/* Header with View Toggle and Filter Button */}
+        {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <h2 className="text-2xl font-bold text-[#2563EB]">All Books</h2>
           <div className="flex gap-4 flex-wrap">
@@ -46,36 +52,57 @@ const AllBooks = () => {
           </div>
         </div>
 
+        {/* Search Bar (শুধু Card View এর জন্য) */}
+        {viewType === "card" && (
+          <div className="mb-6">
+            <input
+              type="text"
+              placeholder="Search by book name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full sm:w-1/2 border px-4 py-2 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+            />
+          </div>
+        )}
+
         {/* Card View */}
         {viewType === "card" && (
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredBooks.map((book) => (
-              <div
-                key={book._id}
-                className="bg-white rounded-lg shadow p-4 flex flex-col"
-              >
-                <img
-                  src={book.image}
-                  alt={book.name}
-                  className="h-48 w-full object-cover rounded"
-                />
-                <h3 className="text-lg font-semibold mt-3">{book.name}</h3>
-                <p className="text-sm text-gray-600">👤 {book.author}</p>
-                <p className="text-sm">📚 {book.category}</p>
-                <p className="text-sm">⭐ {book.rating}</p>
-                <p className="text-sm">
-                  {book.quantity > 0 ? "✅ Available" : "❌ Not Available"}
-                </p>
-                <div className="mt-auto flex justify-between gap-2 pt-4">
-                  <button className="w-1/2 hover:cursor-pointer bg-[#2563EB] text-white py-1 rounded hover:bg-blue-700 transition">
-                    <Link to={`/updateBook/${book._id}`}> Update</Link>
-                  </button>
-                  <button className="w-1/2 hover:cursor-pointer bg-green-600 text-white py-1 rounded hover:bg-green-700 transition">
-                    <Link to={`/bookDetails/${book._id}`}>View Details</Link>
-                  </button>
+            {filteredBooks.length > 0 ? (
+              filteredBooks.map((book) => (
+                <div
+                  key={book._id}
+                  className="bg-white rounded-lg shadow p-4 flex flex-col"
+                >
+                  <img
+                    src={book.image}
+                    alt={book.name}
+                    className="h-48 w-full object-cover rounded"
+                  />
+                  <h3 className="text-lg font-semibold mt-3">{book.name}</h3>
+                  <p className="text-sm text-gray-600">👤 {book.author}</p>
+                  <p className="text-sm">📚 {book.category}</p>
+                  <p className="text-sm">⭐ {book.rating}</p>
+                  <p className="text-sm">
+                    {book.quantity > 0
+                      ? "✅ Available"
+                      : "❌ Not Available"}
+                  </p>
+                  <div className="mt-auto flex justify-between gap-2 pt-4">
+                    <Link
+                      to={`/bookDetails/${book._id}`}
+                      className="w-full text-center bg-green-600 text-white py-1 rounded hover:bg-green-700 transition"
+                    >
+                      View Details
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-center text-gray-500 col-span-full">
+                No books found.
+              </p>
+            )}
           </div>
         )}
 
@@ -110,15 +137,12 @@ const AllBooks = () => {
                     <td className="p-2">{book.rating}</td>
                     <td className="p-2">{book.quantity}</td>
                     <td className="p-2 space-x-2">
-                      <button className="bg-[#2563EB] hover:cursor-pointer text-white px-2 py-1 rounded hover:bg-blue-700 transition text-xs">
-                        <Link to={`/updateBook/${book._id}`}> Update</Link>
-                      </button>
-                      <button className="bg-green-600 hover:cursor-pointer text-white px-2 py-1 rounded hover:bg-green-700 transition text-xs">
-                        <Link to={`/bookDetails/${book._id}`}>
-                          {" "}
-                          View Details
-                        </Link>
-                      </button>
+                      <Link
+                        to={`/bookDetails/${book._id}`}
+                        className="bg-green-600 hover:cursor-pointer text-white px-2 py-1 rounded hover:bg-green-700 transition text-xs"
+                      >
+                        View Details
+                      </Link>
                     </td>
                   </tr>
                 ))}

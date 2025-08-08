@@ -6,6 +6,7 @@ import ExtraSection2 from "../components/ExtraSection/ExtraSection2";
 import Review from "../components/Review/Review";
 import FAQSection from "../components/FAQSection/FAQSection";
 import NextDestination from "../components/NextDestination/NextDestination";
+import NewsletterSection from "../components/NewsletterSection/NewsletterSection";
 
 const Home = () => {
   return (
@@ -17,6 +18,7 @@ const Home = () => {
       <NextDestination></NextDestination>
       <Review></Review>
       <FAQSection></FAQSection>
+      <NewsletterSection></NewsletterSection>
     </div>
   );
 };

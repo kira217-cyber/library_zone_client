@@ -13,6 +13,7 @@ import axios from "axios";
 import ErrorPage from "../pages/ErrorPage";
 import SingleCategory from "../components/Category/SingleCategory";
 import AboutUs from "../pages/AboutUs";
+import Profile from "../pages/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
       {
         path: "about",
         Component: AboutUs,
+      },
+      {
+        path:"profile",
+        Component:Profile
       },
       {
         path: "allBooks",

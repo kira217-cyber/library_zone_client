@@ -100,11 +100,12 @@ const Navbar = () => {
           ) : (
             <>
               <div className="relative group hover:cursor-pointer">
+                <Link to="/profile">
                 <img
                   src={user?.photoURL}
                   alt="user"
                   className="w-9 h-9 rounded-full object-cover border-2 border-white"
-                />
+                /></Link>
                 <div className="absolute top-10 left-1/2 -translate-x-1/2 bg-white text-black text-sm px-3 py-1 rounded shadow-md hidden group-hover:block whitespace-nowrap z-10">
                   {user?.displayName}
                 </div>
