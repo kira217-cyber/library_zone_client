@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { useLoaderData, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
@@ -8,9 +8,7 @@ const UpdateBook = () => {
   const navigate = useNavigate();
 
   const initialBook = updateBook.data;
-
-  const { _id, name, author, category, rating, description, image, quantity } =
-    initialBook;
+  const { _id, name, author, category, rating, description, image, quantity } = initialBook;
 
   const categories = [
     "Novel",
@@ -23,6 +21,35 @@ const UpdateBook = () => {
     "Adventure",
   ];
 
+  // imgbb API key
+  const imgbbKey = import.meta.env.VITE_IMGBB_KEY;
+  const [imageUrl, setImageUrl] = useState(image);
+  const [uploading, setUploading] = useState(false);
+
+  // Handle image upload
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${imgbbKey}`,
+        formData
+      );
+      setImageUrl(res.data.data.url);
+      toast.success("Image uploaded successfully!");
+    } catch (err) {
+      toast.error("Image upload failed!");
+      setImageUrl(image); // fallback to old image
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleUpdate = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -32,15 +59,14 @@ const UpdateBook = () => {
     // Convert string values to appropriate types
     updatedData.rating = Number(updatedData.rating);
     updatedData.quantity = Number(updatedData.quantity);
+    updatedData.image = imageUrl; // use uploaded image url
 
     axios
       .put(`${import.meta.env.VITE_API_URL}/books/${_id}`, updatedData)
       .then((res) => {
         if (res.data.modifiedCount) {
-          console.log("Updated:", res.data);
           toast.success("Book updated successfully!");
-
-          navigate("/dashboard/update-any-book");
+          navigate("/dashboard/update-my-book");
         }
       })
       .catch((error) => {
@@ -63,14 +89,29 @@ const UpdateBook = () => {
           {/* Book Cover */}
           <div>
             <label className="block text-sm font-medium mb-1">
-              Book Cover URL
+              Book Cover Photo
             </label>
             <input
-              type="text"
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="w-full border rounded px-3 py-2 hover:cursor-pointer"
+            />
+            {uploading && (
+              <p className="text-blue-600 text-sm mt-2">Uploading...</p>
+            )}
+            {imageUrl && (
+              <img
+                src={imageUrl}
+                alt="Book Cover"
+                className="mt-2 w-32 h-32 object-cover rounded shadow"
+              />
+            )}
+            {/* Hidden input for image url */}
+            <input
+              type="hidden"
               name="image"
-              defaultValue={image}
-              className="w-full border rounded px-3 py-2"
-              required
+              value={imageUrl}
             />
           </div>
 
@@ -119,7 +160,7 @@ const UpdateBook = () => {
             <select
               name="category"
               defaultValue={category}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 hover:cursor-pointer"
               required
             >
               {categories.map((cat) => (
@@ -165,8 +206,9 @@ const UpdateBook = () => {
             <button
               type="submit"
               className="w-full hover:cursor-pointer bg-[#2563EB] text-white font-semibold py-2 rounded hover:bg-blue-700 transition"
+              disabled={uploading}
             >
-              Update Book
+              {uploading ? "Uploading..." : "Update Book"}
             </button>
           </div>
         </form>

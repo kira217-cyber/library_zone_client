@@ -3,11 +3,13 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 const AddBook = () => {
   const { user } = useAuth();
   const [imageUrl, setImageUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+  const navigation = useNavigate();
 
   const categories = [
     "Select a Category",
@@ -81,6 +83,7 @@ const AddBook = () => {
         if (res.data.insertedId) {
           toast.success("Book added successfully!");
           form.reset();
+          navigation("/dashboard/update-my-book");
           setImageUrl("");
         }
       })
@@ -107,7 +110,7 @@ const AddBook = () => {
               type="file"
               accept="image/*"
               onChange={handleImageUpload}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 hover:cursor-pointer"
               required
             />
             {uploading && (
@@ -156,7 +159,7 @@ const AddBook = () => {
             <select
               name="category"
               required
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 hover:cursor-pointer"
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>

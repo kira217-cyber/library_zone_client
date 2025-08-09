@@ -81,8 +81,6 @@ const AllBooks = () => {
                   />
                   <h3 className="text-lg font-semibold mt-3">{book.name}</h3>
                   <p className="text-sm text-gray-600">👤 {book.author}</p>
-                  <p className="text-sm">📚 {book.category}</p>
-                  <p className="text-sm">⭐ {book.rating}</p>
                   <p className="text-sm">
                     {book.quantity > 0 ? "✅ Available" : "❌ Not Available"}
                   </p>
@@ -113,8 +111,6 @@ const AllBooks = () => {
                   <th className="p-2">Image</th>
                   <th className="p-2">Title</th>
                   <th className="p-2">Author</th>
-                  <th className="p-2">Category</th>
-                  <th className="p-2">Rating</th>
                   <th className="p-2">Quantity</th>
                   <th className="p-2">Actions</th>
                 </tr>
@@ -131,8 +127,6 @@ const AllBooks = () => {
                     </td>
                     <td className="p-2">{book.name}</td>
                     <td className="p-2">{book.author}</td>
-                    <td className="p-2">{book.category}</td>
-                    <td className="p-2">{book.rating}</td>
                     <td className="p-2">{book.quantity}</td>
                     <td className="p-2 space-x-2">
                       <Link

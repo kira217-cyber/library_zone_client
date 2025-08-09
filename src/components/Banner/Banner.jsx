@@ -56,10 +56,10 @@ const Banner = () => {
                 </h2>
                 <p className="text-lg md:text-xl mb-6">{slide.text}</p>
                 <button
-                  onClick={() => navigate("/addBook")}
+                  onClick={() => navigate("/allBooks")}
                   className="bg-white hover:cursor-pointer text-[#2563EB] font-semibold px-6 py-3 rounded-full hover:bg-[#2563EB] hover:text-white transition"
                 >
-                  Add Book
+                  All Books
                 </button>
               </div>
             </div>

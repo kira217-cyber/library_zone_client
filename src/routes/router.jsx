@@ -16,7 +16,8 @@ import AboutUs from "../pages/AboutUs";
 import Profile from "../pages/Profile";
 import DashboardLayouts from "../MainLayouts/DashboardLayouts";
 import Statistics from "../pages/Dashboard/Statistics";
-import UpdateAnyBook from "../pages/Dashboard/UpdateAnyBook";
+import UpdateMyBook from "../pages/Dashboard/UpdateMyBook";
+import MyBookDetails from "../pages/Dashboard/MyBookDetails";
 
 export const router = createBrowserRouter([
   {
@@ -95,10 +96,9 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "update-any-book",
-        loader: () => axios(`${import.meta.env.VITE_API_URL}/books`),
+        path: "update-my-book",
         element:<PrivetRoute>
-          <UpdateAnyBook></UpdateAnyBook>
+          <UpdateMyBook></UpdateMyBook>
         </PrivetRoute>
       },
       {
@@ -108,6 +108,12 @@ export const router = createBrowserRouter([
             <AddBook></AddBook>
           </PrivetRoute>
         ),
+      },
+      {
+        path: "myBookDetails/:id",
+        loader: ({ params }) =>
+          axios(`${import.meta.env.VITE_API_URL}/books/${params.id}`),
+        element: <MyBookDetails></MyBookDetails>,
       },
     ],
   },

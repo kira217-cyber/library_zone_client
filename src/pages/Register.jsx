@@ -7,15 +7,45 @@ import SocialLogin from "./shared/SocialLogin";
 import Lottie from "lottie-react";
 import registerLottie from "../assets/Lotties/register.json";
 import useAuth from "../hooks/useAuth";
+import axios from "axios";
 
 const Register = () => {
   const { register, setUser, updateUser } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [photoURL, setPhotoURL] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
   const from = location.state || "/";
+
+  // imgbb API key
+  const imgbbKey = import.meta.env.VITE_IMGBB_KEY;
+
+  // Handle image upload
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${imgbbKey}`,
+        formData
+      );
+      setPhotoURL(res.data.data.url);
+      toast.success("Photo uploaded successfully!");
+    } catch (err) {
+      toast.error("Photo upload failed!");
+      setPhotoURL("");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,10 +53,7 @@ const Register = () => {
     const form = e.target;
     const name = form.name.value;
     const email = form.email.value;
-    const photoURL = form.photoURL.value;
     const password = form.password.value;
-
-    console.log(name, email, password, photoURL);
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
     if (!passwordRegex.test(password)) {
@@ -36,22 +63,25 @@ const Register = () => {
       return;
     }
 
+    if (!photoURL) {
+      toast.error("Please upload your profile photo.");
+      return;
+    }
+
     register(email, password)
       .then((res) => {
         updateUser({ displayName: name, photoURL: photoURL }).then(() => {
-          setUser((prevUser) => {
-            return {
-              ...prevUser,
-              displayName: name,
-              photoURL: photoURL,
-            };
-          });
+          setUser((prevUser) => ({
+            ...prevUser,
+            displayName: name,
+            photoURL: photoURL,
+          }));
         });
-        console.log(res);
         toast.success("Registered successfully!");
         navigate(from);
       })
       .catch((err) => {
+        toast.error("Registration failed!");
         console.log(err);
       });
   };
@@ -84,13 +114,26 @@ const Register = () => {
               />
             </div>
             <div>
-              <label className="block mb-1 font-medium">Photo URL</label>
+              <label className="block mb-1 font-medium">Profile Photo</label>
               <input
-                type="text"
-                name="photoURL"
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="w-full border rounded px-3 py-2 hover:cursor-pointer"
                 required
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
               />
+              {uploading && (
+                <p className="text-blue-600 text-sm mt-2">Uploading...</p>
+              )}
+              {photoURL && (
+                <img
+                  src={photoURL}
+                  alt="Profile"
+                  className="mt-2 w-20 h-20 object-cover rounded-full shadow"
+                />
+              )}
+              {/* Hidden input for photoURL */}
+              <input type="hidden" name="photoURL" value={photoURL} />
             </div>
             <div className="relative">
               <label className="block mb-1 font-medium">Password</label>
@@ -111,8 +154,9 @@ const Register = () => {
             <button
               type="submit"
               className="w-full bg-primary hover:cursor-pointer text-white font-semibold py-2 rounded hover:bg-primary/90 transition"
+              disabled={uploading}
             >
-              Register
+              {uploading ? "Uploading..." : "Register"}
             </button>
           </form>
           <p className="text-sm mt-4 text-center">

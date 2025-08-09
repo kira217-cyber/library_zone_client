@@ -16,10 +16,10 @@ import { toast } from "react-toastify";
 const navLinks = [
   //   { to: "/dashboard", label: "Statistics", icon: <FaChartBar /> },
   { to: "/dashboard/addBook", label: "Add Book", icon: <FaBook /> },
-  { to: "/dashboard/update-any-book", label: "Update Any Book", icon: <FaEdit /> },
+  { to: "/dashboard/update-my-book", label: "Update My Book", icon: <FaEdit /> },
   {
     to: "/dashboard/borrowedBooks",
-    label: "Borrowed Book",
+    label: "My Borrowed Book",
     icon: <FaClipboardList />,
   },
 ];
