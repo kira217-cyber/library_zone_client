@@ -72,7 +72,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-[#2563EB] text-white shadow-md fixed top-0 left-0 w-full z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 md:px-14 lg:px-14 py-3 flex items-center justify-between">
         {/* Logo/Title */}
         <div className="text-xl font-bold">
           <Link to="/" className="hover:text-white">
@@ -81,18 +81,18 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex gap-6 items-center">{navLinks}</ul>
+        <ul className="hidden lg:flex gap-6 items-center">{navLinks}</ul>
 
         {/* Right side */}
         <div className="flex items-center gap-4">
           {!user ? (
             <>
-              <NavLink to="/login" className="hover:text-white hidden md:block">
+              <NavLink to="/login" className="hover:text-white hidden lg:block">
                 Login
               </NavLink>
               <NavLink
                 to="/register"
-                className="hover:text-white hidden md:block"
+                className="hover:text-white hidden lg:block"
               >
                 Register
               </NavLink>
@@ -112,7 +112,7 @@ const Navbar = () => {
               </div>
               <button
                 onClick={handleLogout}
-                className="ml-4 text-sm hover:underline hover:cursor-pointer hidden md:inline"
+                className="ml-2 text-sm hover:underline hover:cursor-pointer hidden lg:inline"
               >
                 Logout
               </button>
@@ -122,7 +122,7 @@ const Navbar = () => {
           {/* Mobile Toggle */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden focus:outline-none"
+            className="lg:hidden focus:outline-none"
           >
             {menuOpen ? <FaTimes size={22} /> : <FaBars size={22} />}
           </button>
@@ -131,7 +131,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <ul className="md:hidden bg-[#2563EB] text-white px-4 pb-4 space-y-2">
+        <ul className="lg:hidden bg-[#2563EB] text-white px-4 pb-4 space-y-2">
           {navLinks}
           {!user ? (
             <>
