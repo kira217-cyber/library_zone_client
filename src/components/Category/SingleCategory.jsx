@@ -6,8 +6,7 @@ const SingleCategory = () => {
   const { name } = useParams();
   const [books, setBooks] = useState([]);
 
-
-    useEffect(() => {
+  useEffect(() => {
     axios(`${import.meta.env.VITE_API_URL}/books?category=${name}`)
       .then((res) => {
         setBooks(res.data);
@@ -39,8 +38,6 @@ const SingleCategory = () => {
               <h3 className="text-lg font-bold">{book.name}</h3>
               <p>Author: {book.author}</p>
               <p>Category: {book.category}</p>
-              <p>Quantity: {book.quantity}</p>
-              <p className="text-sm">⭐ {book.rating}</p>
 
               <button className="bg-[#2563EB] hover:cursor-pointer text-white px-4 py-2 rounded hover:bg-blue-700 transition">
                 <Link to={`/bookDetails/${book._id}`}>View Details</Link>
