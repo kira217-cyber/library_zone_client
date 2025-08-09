@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuth from "../hooks/useAuth";
@@ -6,6 +6,8 @@ import axios from "axios";
 
 const AddBook = () => {
   const { user } = useAuth();
+  const [imageUrl, setImageUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const categories = [
     "Select a Category",
@@ -19,6 +21,35 @@ const AddBook = () => {
     "Adventure",
   ];
 
+  // imgbb API key
+  const imgbbKey = import.meta.env.VITE_IMGBB_KEY;
+  console.log(imgbbKey); // key আসছে কিনা দেখুন
+
+  // Handle image upload
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${imgbbKey}`,
+        formData
+      );
+      setImageUrl(res.data.data.url);
+      toast.success("Image uploaded successfully!");
+    } catch (err) {
+      toast.error("Image upload failed!");
+      setImageUrl("");
+      console.log(err); // এখানে error details দেখুন
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -30,12 +61,18 @@ const AddBook = () => {
       return;
     }
 
+    if (!imageUrl) {
+      toast.error("Please upload a book cover photo.");
+      return;
+    }
+
     // ✅ Convert quantity and rating to numbers
     const bookData = {
       ...data,
+      image: imageUrl, // Use uploaded image url
       quantity: Number(data.quantity),
       rating: Number(data.rating),
-      email: user?.email || "unknown", // Optional: Add user's email
+      email: user?.email || "unknown",
     };
 
     axios
@@ -44,6 +81,7 @@ const AddBook = () => {
         if (res.data.insertedId) {
           toast.success("Book added successfully!");
           form.reset();
+          setImageUrl("");
         }
       })
       .catch((err) => {
@@ -63,14 +101,25 @@ const AddBook = () => {
         >
           <div className="col-span-1">
             <label className="block text-sm font-medium mb-1">
-              Book Cover URL
+              Book Cover Photo
             </label>
             <input
-              type="text"
-              name="image"
-              required
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
               className="w-full border rounded px-3 py-2"
+              required
             />
+            {uploading && (
+              <p className="text-blue-600 text-sm mt-2">Uploading...</p>
+            )}
+            {imageUrl && (
+              <img
+                src={imageUrl}
+                alt="Book Cover"
+                className="mt-2 w-32 h-32 object-cover rounded shadow"
+              />
+            )}
           </div>
           <div className="col-span-1">
             <label className="block text-sm font-medium mb-1">Book Title</label>
@@ -159,8 +208,9 @@ const AddBook = () => {
             <button
               type="submit"
               className="w-full bg-[#2563EB] hover:cursor-pointer text-white font-semibold py-2 rounded hover:bg-blue-700 transition"
+              disabled={uploading}
             >
-              Add Book
+              {uploading ? "Uploading..." : "Add Book"}
             </button>
           </div>
         </form>
